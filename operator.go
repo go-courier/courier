@@ -3,9 +3,15 @@ package courier
 import (
 	"net/url"
 	"reflect"
+	"fmt"
 )
 
 func NewOperatorFactory(op Operator, last bool) *OperatorFactory {
+	opType := typeOfOperator(reflect.TypeOf(op))
+	if opType.Kind() != reflect.Struct {
+		panic(fmt.Errorf("operator must be a struct type, got %#v", op))
+	}
+
 	info := &OperatorFactory{}
 	info.IsLast = last
 
@@ -35,10 +41,10 @@ func typeOfOperator(tpe reflect.Type) reflect.Type {
 }
 
 type OperatorFactory struct {
-	Type       reflect.Type
-	ContextKey string
-	Params     url.Values
-	IsLast     bool
+	Type             reflect.Type
+	ContextKey       string
+	Params           url.Values
+	IsLast           bool
 	Operator
 }
 
