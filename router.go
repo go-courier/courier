@@ -76,7 +76,7 @@ type Route struct {
 	last      bool
 }
 
-func (route *Route) OperatorFactories() (operatorFactories []*OperatorFactory) {
+func (route *Route) OperatorFactories() (operatorFactories []*OperatorMeta) {
 	lenOfOps := len(route.Operators)
 	for i, op := range route.Operators {
 		if _, isOperatorWithoutOutput := op.(OperatorWithoutOutput); !isOperatorWithoutOutput {

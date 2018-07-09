@@ -6,13 +6,13 @@ import (
 	"fmt"
 )
 
-func NewOperatorFactory(op Operator, last bool) *OperatorFactory {
+func NewOperatorFactory(op Operator, last bool) *OperatorMeta {
 	opType := typeOfOperator(reflect.TypeOf(op))
 	if opType.Kind() != reflect.Struct {
 		panic(fmt.Errorf("operator must be a struct type, got %#v", op))
 	}
 
-	info := &OperatorFactory{}
+	info := &OperatorMeta{}
 	info.IsLast = last
 
 	info.Operator = op
@@ -40,7 +40,7 @@ func typeOfOperator(tpe reflect.Type) reflect.Type {
 	return tpe
 }
 
-type OperatorFactory struct {
+type OperatorMeta struct {
 	Type             reflect.Type
 	ContextKey       string
 	Params           url.Values
@@ -48,14 +48,14 @@ type OperatorFactory struct {
 	Operator
 }
 
-func (o *OperatorFactory) String() string {
+func (o *OperatorMeta) String() string {
 	if o.Params != nil {
 		return o.Type.String() + "?" + o.Params.Encode()
 	}
 	return o.Type.String()
 }
 
-func (o *OperatorFactory) New() (Operator) {
+func (o *OperatorMeta) New() (Operator) {
 	rv := reflect.New(o.Type)
 	op := rv.Interface().(Operator)
 
