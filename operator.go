@@ -55,7 +55,7 @@ func (o *OperatorFactory) String() string {
 	return o.Type.String()
 }
 
-func (o *OperatorFactory) New() (Operator, error) {
+func (o *OperatorFactory) New() (Operator) {
 	rv := reflect.New(o.Type)
 	op := rv.Interface().(Operator)
 
@@ -63,7 +63,7 @@ func (o *OperatorFactory) New() (Operator, error) {
 		defaultsSetter.SetDefaults()
 	}
 
-	return op, nil
+	return op
 }
 
 type EmptyOperator struct {

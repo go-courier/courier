@@ -31,8 +31,7 @@ func (DoSomeThing) Output(ctx context.Context) (interface{}, error) {
 func TestNewOperatorFactory(t *testing.T) {
 	opInfo := NewOperatorFactory(&DoSomeThing{}, true)
 
-	op, err := opInfo.New()
-	assert.NoError(t, err)
+	op := opInfo.New()
 	assert.Equal(t, 1, op.(*DoSomeThing).Param)
 }
 
