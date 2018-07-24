@@ -4,16 +4,16 @@ import (
 	"context"
 )
 
+type Client interface {
+	Do(req interface{}, metas ...Metadata) Result
+}
+
+type Result interface {
+	Into(v interface{}) (Metadata, error)
+}
+
 type Transport interface {
 	Serve(router *Router) error
-}
-
-type Request interface {
-	Do() RequestResult
-}
-
-type RequestResult interface {
-	Into(v interface{}, metadata Metadata) error
 }
 
 type Operator interface {

@@ -1,9 +1,9 @@
 package courier
 
 import (
+	"fmt"
 	"net/url"
 	"reflect"
-	"fmt"
 )
 
 func NewOperatorFactory(op Operator, last bool) *OperatorMeta {
@@ -41,10 +41,10 @@ func typeOfOperator(tpe reflect.Type) reflect.Type {
 }
 
 type OperatorMeta struct {
-	Type             reflect.Type
-	ContextKey       string
-	Params           url.Values
-	IsLast           bool
+	Type       reflect.Type
+	ContextKey string
+	Params     url.Values
+	IsLast     bool
 	Operator
 }
 
@@ -55,7 +55,7 @@ func (o *OperatorMeta) String() string {
 	return o.Type.String()
 }
 
-func (o *OperatorMeta) New() (Operator) {
+func (o *OperatorMeta) New() Operator {
 	rv := reflect.New(o.Type)
 	op := rv.Interface().(Operator)
 
