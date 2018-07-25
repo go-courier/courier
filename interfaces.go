@@ -5,7 +5,7 @@ import (
 )
 
 type Client interface {
-	Do(req interface{}, metas ...Metadata) Result
+	Do(operationID string, req interface{}, metas ...Metadata) Result
 }
 
 type Result interface {
