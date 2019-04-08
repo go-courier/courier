@@ -2,23 +2,24 @@ package courier
 
 import (
 	"log"
+	"sync"
 )
 
 func Run(router *Router, transports ...Transport) {
-	errs := make(chan error)
+	wg := &sync.WaitGroup{}
 
 	for i := range transports {
 		s := transports[i]
+		wg.Add(1)
+
 		go func() {
+			defer wg.Done()
+
 			if err := s.Serve(router); err != nil {
-				errs <- err
+				log.Println(err)
 			}
 		}()
 	}
 
-	select {
-	case err := <-errs:
-		log.Println(err)
-		close(errs)
-	}
+	wg.Wait()
 }
