@@ -1,5 +1,9 @@
 package courier
 
+import (
+	"log"
+)
+
 func Run(router *Router, transports ...Transport) {
 	errs := make(chan error)
 
@@ -14,6 +18,7 @@ func Run(router *Router, transports ...Transport) {
 
 	select {
 	case err := <-errs:
-		panic(err)
+		log.Println(err)
+		close(errs)
 	}
 }
