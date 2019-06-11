@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func ExampleNewRouter() {
@@ -81,5 +81,5 @@ func TestRegister(t *testing.T) {
 	err := TryCatch(func() {
 		RouterRoot.Register(RouterA)
 	})
-	assert.Error(t, err)
+	require.Error(t, err)
 }

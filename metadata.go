@@ -4,7 +4,7 @@ import (
 	"net/url"
 )
 
-// merge metadata into one MetatData
+// merge metadata into one MetaData
 func FromMetas(metas ...Metadata) Metadata {
 	m := Metadata{}
 	for _, meta := range metas {

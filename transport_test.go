@@ -18,9 +18,6 @@ func (FakeTransport) Serve(router *Router) error {
 func ExampleRun() {
 	var RouterRoot = NewRouter(&EmptyOperator{})
 
-	err := TryCatch(func() {
-		Run(RouterRoot, &FakeTransport{})
-	})
-	fmt.Println(err)
-	// Output: some thing wrong
+	Run(RouterRoot, &FakeTransport{})
+	// Output:
 }
