@@ -8,8 +8,19 @@ import (
 )
 
 func NewRouter(operators ...Operator) *Router {
+	ops := make([]Operator, 0)
+	for i := range operators {
+		op := operators[i]
+
+		if withMiddleOperators, ok := op.(WithMiddleOperators); ok {
+			ops = append(ops, withMiddleOperators.MiddleOperators()...)
+		}
+
+		ops = append(ops, op)
+	}
+
 	return &Router{
-		operators: operators,
+		operators: ops,
 	}
 }
 

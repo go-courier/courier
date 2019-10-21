@@ -20,6 +20,12 @@ type Operator interface {
 	Output(ctx context.Context) (interface{}, error)
 }
 
+type MiddleOperators []Operator
+
+type WithMiddleOperators interface {
+	MiddleOperators() MiddleOperators
+}
+
 type MetadataCarrier interface {
 	Meta() Metadata
 }
