@@ -18,7 +18,7 @@ func ExampleNewRouter() {
 
 	RouterA.Register(NewRouter(&OperatorA1{}))
 	RouterA.Register(NewRouter(&OperatorA2{}))
-	RouterB.Register(NewRouter(&OperatorB1{}, OperatorB2{}))
+	RouterB.Register(NewRouter(&OperatorB2{}))
 
 	fmt.Println(RouterRoot.Routes())
 	// Output:
@@ -68,6 +68,12 @@ func (OperatorB1) Output(ctx context.Context) (interface{}, error) {
 }
 
 type OperatorB2 struct{}
+
+func (OperatorB2) MiddleOperators() MiddleOperators {
+	return MiddleOperators{
+		&OperatorB1{},
+	}
+}
 
 func (OperatorB2) Output(ctx context.Context) (interface{}, error) {
 	return nil, nil
