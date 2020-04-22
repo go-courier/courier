@@ -6,6 +6,9 @@ import (
 	"reflect"
 )
 
+// @deprecated
+type OperatorMeta = OperatorFactory
+
 func NewOperatorFactory(op Operator, last bool) *OperatorFactory {
 	opType := typeOfOperator(reflect.TypeOf(op))
 	if opType.Kind() != reflect.Struct {
