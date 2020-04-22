@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	. "github.com/onsi/gomega"
 )
 
 func ExampleNewRouter() {
@@ -22,9 +22,9 @@ func ExampleNewRouter() {
 
 	fmt.Println(RouterRoot.Routes())
 	// Output:
-	//courier.OperatorA |> courier.OperatorA1?allowedRoles=ADMIN&allowedRoles=OWNER
-	//courier.OperatorA |> courier.OperatorA2
-	//courier.OperatorB |> courier.OperatorB1 |> courier.OperatorB2
+	//courier.EmptyOperator |> courier.OperatorA |> courier.OperatorA1?allowedRoles=ADMIN&allowedRoles=OWNER
+	//courier.EmptyOperator |> courier.OperatorA |> courier.OperatorA2
+	//courier.EmptyOperator |> courier.OperatorB |> courier.OperatorB1 |> courier.OperatorB2
 }
 
 type OperatorA struct{}
@@ -80,12 +80,13 @@ func (OperatorB2) Output(ctx context.Context) (interface{}, error) {
 }
 
 func TestRegister(t *testing.T) {
-	var RouterRoot = NewRouter(&EmptyOperator{})
-	var RouterA = NewRouter(&OperatorA{})
+	RouterRoot := NewRouter(&EmptyOperator{})
+	RouterA := NewRouter(&OperatorA{})
 	RouterRoot.Register(RouterA)
 
 	err := TryCatch(func() {
 		RouterRoot.Register(RouterA)
 	})
-	require.Error(t, err)
+
+	NewWithT(t).Expect(err).NotTo(BeNil())
 }

@@ -54,20 +54,32 @@ func (router *Router) route() *Route {
 
 	return &Route{
 		Operators: operators,
-		last:      router.children == nil,
+		last:      len(router.children) == 0,
 	}
 }
 
 func (router *Router) Routes() (routes Routes) {
-	for childRouter := range router.children {
-		route := childRouter.route()
+	maybeAppendRoute := func(router *Router) {
+		route := router.route()
+
 		if route.last && len(route.Operators) > 0 {
 			routes = append(routes, route)
 		}
-		if childRouter.children != nil {
-			routes = append(routes, childRouter.Routes()...)
+
+		if len(router.children) > 0 {
+			routes = append(routes, router.Routes()...)
 		}
 	}
+
+	if len(router.children) == 0 {
+		maybeAppendRoute(router)
+		return
+	}
+
+	for childRouter := range router.children {
+		maybeAppendRoute(childRouter)
+	}
+
 	return
 }
 
@@ -87,12 +99,10 @@ type Route struct {
 	last      bool
 }
 
-func (route *Route) OperatorFactories() (operatorFactories []*OperatorMeta) {
+func (route *Route) OperatorFactories() (operatorFactories []*OperatorFactory) {
 	lenOfOps := len(route.Operators)
 	for i, op := range route.Operators {
-		if _, isOperatorWithoutOutput := op.(OperatorWithoutOutput); !isOperatorWithoutOutput {
-			operatorFactories = append(operatorFactories, NewOperatorFactory(op, i == lenOfOps-1))
-		}
+		operatorFactories = append(operatorFactories, NewOperatorFactory(op, i == lenOfOps-1))
 	}
 	return
 }

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	. "github.com/onsi/gomega"
 )
 
 type DoSomeThing struct {
@@ -32,7 +32,8 @@ func TestNewOperatorFactory(t *testing.T) {
 	opInfo := NewOperatorFactory(&DoSomeThing{}, true)
 
 	op := opInfo.New()
-	assert.Equal(t, 1, op.(*DoSomeThing).Param)
+
+	NewWithT(t).Expect(op.(*DoSomeThing).Param).To(Equal(1))
 }
 
 func TryCatch(f func()) (err error) {

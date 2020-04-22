@@ -6,31 +6,36 @@ import (
 	"reflect"
 )
 
-func NewOperatorFactory(op Operator, last bool) *OperatorMeta {
+func NewOperatorFactory(op Operator, last bool) *OperatorFactory {
 	opType := typeOfOperator(reflect.TypeOf(op))
 	if opType.Kind() != reflect.Struct {
 		panic(fmt.Errorf("operator must be a struct type, got %#v", op))
 	}
 
-	info := &OperatorMeta{}
-	info.IsLast = last
+	meta := &OperatorFactory{}
+	meta.IsLast = last
 
-	info.Operator = op
-	info.Type = typeOfOperator(reflect.TypeOf(op))
+	meta.Operator = op
 
-	if operatorWithParams, ok := op.(OperatorWithParams); ok {
-		info.Params = url.Values(operatorWithParams.OperatorParams())
+	if _, isOperatorWithoutOutput := op.(OperatorWithoutOutput); isOperatorWithoutOutput {
+		meta.NoOutput = true
 	}
 
-	if !info.IsLast {
+	meta.Type = typeOfOperator(reflect.TypeOf(op))
+
+	if operatorWithParams, ok := op.(OperatorWithParams); ok {
+		meta.Params = operatorWithParams.OperatorParams()
+	}
+
+	if !meta.IsLast {
 		if ctxKey, ok := op.(ContextProvider); ok {
-			info.ContextKey = ctxKey.ContextKey()
+			meta.ContextKey = ctxKey.ContextKey()
 		} else {
-			info.ContextKey = info.Type.String()
+			meta.ContextKey = meta.Type.String()
 		}
 	}
 
-	return info
+	return meta
 }
 
 func typeOfOperator(tpe reflect.Type) reflect.Type {
@@ -40,22 +45,23 @@ func typeOfOperator(tpe reflect.Type) reflect.Type {
 	return tpe
 }
 
-type OperatorMeta struct {
+type OperatorFactory struct {
 	Type       reflect.Type
 	ContextKey string
+	NoOutput   bool
 	Params     url.Values
 	IsLast     bool
-	Operator
+	Operator   Operator
 }
 
-func (o *OperatorMeta) String() string {
+func (o *OperatorFactory) String() string {
 	if o.Params != nil {
 		return o.Type.String() + "?" + o.Params.Encode()
 	}
 	return o.Type.String()
 }
 
-func (o *OperatorMeta) New() Operator {
+func (o *OperatorFactory) New() Operator {
 	rv := reflect.New(o.Type)
 	op := rv.Interface().(Operator)
 
