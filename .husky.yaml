@@ -1,18 +1,6 @@
-
-scripts:
-  lint:
-    - husky hook pre-commit
-    - husky hook commit-msg
-  test:
-    - go test -v -race ./...
-  cover:
-    - go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
-  install:
-    - go install -v
-
 hooks:
   pre-commit:
-    - go vet ./...
+    - golangci-lint run
     - husky lint-staged
   commit-msg:
     - husky lint-commit

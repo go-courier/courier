@@ -41,7 +41,7 @@ type OperatorWithoutOutput interface {
 
 type ContextProvider interface {
 	Operator
-	ContextKey() string
+	ContextKey() interface{}
 }
 
 type DefaultsSetter interface {

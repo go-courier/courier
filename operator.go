@@ -34,11 +34,19 @@ func NewOperatorFactory(op Operator, last bool) *OperatorFactory {
 		if ctxKey, ok := op.(ContextProvider); ok {
 			meta.ContextKey = ctxKey.ContextKey()
 		} else {
-			meta.ContextKey = meta.Type.String()
+			if ctxKey, ok := op.(oldContextProvider); ok {
+				meta.ContextKey = ctxKey.ContextKey()
+			} else {
+				meta.ContextKey = meta.Type.String()
+			}
 		}
 	}
 
 	return meta
+}
+
+type oldContextProvider interface {
+	ContextKey() string
 }
 
 func typeOfOperator(tpe reflect.Type) reflect.Type {
@@ -50,7 +58,7 @@ func typeOfOperator(tpe reflect.Type) reflect.Type {
 
 type OperatorFactory struct {
 	Type       reflect.Type
-	ContextKey string
+	ContextKey interface{}
 	NoOutput   bool
 	Params     url.Values
 	IsLast     bool
