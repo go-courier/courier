@@ -5,6 +5,14 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+# [1.4.1](https://github.com/go-courier/courier/compare/v1.4.0...v1.4.1)
+
+### Bug Fixes
+
+* **fix** api enhance for new operator ([6f956d8](https://github.com/go-courier/courier/commit/6f956d803655008a3d677dcc5b8e2bdbf323d081))
+
+
+
 # [1.4.0](https://github.com/go-courier/courier/compare/v1.3.1...v1.4.0)
 
 ### Features
