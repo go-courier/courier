@@ -47,3 +47,7 @@ type ContextProvider interface {
 type DefaultsSetter interface {
 	SetDefaults()
 }
+
+type OperatorInit interface {
+	InitFrom(o Operator)
+}

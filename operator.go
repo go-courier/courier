@@ -80,6 +80,10 @@ func (o *OperatorFactory) New() Operator {
 		defaultsSetter.SetDefaults()
 	}
 
+	if operatorInit, ok := op.(OperatorInit); ok {
+		operatorInit.InitFrom(o.Operator)
+	}
+
 	return op
 }
 
