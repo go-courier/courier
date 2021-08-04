@@ -1,7 +1,5 @@
 module github.com/go-courier/courier
 
-go 1.14
+go 1.16
 
-require (
-	github.com/onsi/gomega v1.10.1
-)
+require github.com/onsi/gomega v1.14.0

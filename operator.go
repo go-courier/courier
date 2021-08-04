@@ -73,15 +73,20 @@ func (o *OperatorFactory) String() string {
 }
 
 func (o *OperatorFactory) New() Operator {
-	rv := reflect.New(o.Type)
-	op := rv.Interface().(Operator)
+	var op Operator
 
-	if defaultsSetter, ok := op.(DefaultsSetter); ok {
-		defaultsSetter.SetDefaults()
+	if operatorNewer, ok := o.Operator.(OperatorNewer); ok {
+		op = operatorNewer.New()
+	} else {
+		op = reflect.New(o.Type).Interface().(Operator)
 	}
 
 	if operatorInit, ok := op.(OperatorInit); ok {
 		operatorInit.InitFrom(o.Operator)
+	}
+
+	if defaultsSetter, ok := op.(DefaultsSetter); ok {
+		defaultsSetter.SetDefaults()
 	}
 
 	return op

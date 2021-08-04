@@ -51,3 +51,7 @@ type DefaultsSetter interface {
 type OperatorInit interface {
 	InitFrom(o Operator)
 }
+
+type OperatorNewer interface {
+	New() Operator
+}
