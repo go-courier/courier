@@ -5,6 +5,14 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+# [1.5.0](/compare/v1.4.1...v1.5.0)
+
+### Features
+
+* **feat** add interface OperatorNewer to avoid using reflect.New ([7003e03](/commit/7003e038509f03053df92fbe875d37ca48eec8c6))
+
+
+
 # [1.4.1](https://github.com/go-courier/courier/compare/v1.4.0...v1.4.1)
 
 ### Bug Fixes
